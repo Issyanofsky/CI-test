@@ -1,0 +1,13 @@
+# Linting
+flake8==3.9.2
+
+# Testing
+pytest==6.2.4
+
+# Email
+yagmail==0.14.245
+
+# Other dependencies
+requests==2.25.1
+numpy==1.21.0
+pandas==1.3.0

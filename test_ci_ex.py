@@ -4,7 +4,7 @@
 # In[ ]:
 
 
-import print_hello from ci_test
+import print_hello from ci_ex
 
 def test_print_hello():
     assert print_hello() == "hello issy"

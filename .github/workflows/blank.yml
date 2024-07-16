@@ -33,4 +33,4 @@ jobs:
           python -m pip install pytest
       - name: run script
         run: |
-          python -m test_ci-test
+          python -m pytest

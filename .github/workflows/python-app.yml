@@ -3,7 +3,7 @@ name: Ci Pipeline
 on:
   pull_request:
     branches:
-      - Issy
+      - issy
 
 jobs:
   lint:

@@ -65,11 +65,15 @@ jobs:
         EMAIL_USER: ${{ secrets.EMAIL_USER }}
         EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
         TO_EMAIL: 'ecyanofsky@gmail.com'
-      run:
+      run: |
         python -c "
 import yagmail
-yag = yagmail.SMTP('${{ secrets.EMAIL_USER }}', '${{ secrets.EMAIL_PASS }}')
+import os
+email_user = os.getenv('EMAIL_USER')
+email_pass = os.getenv('EMAIL_PASS')
+to_email = os.getenv('TO_EMAIL')
+yag = yagmail.SMTP(email_user, email_pass)
 body = 'The CI pipeline has completed successfully.'
-yag.send('${{ env.TO_EMAIL }}', 'CI Pipeline Notification', body)
+yag.send(to_email, 'CI Pipeline Notification', body)
 "
     

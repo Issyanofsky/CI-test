@@ -68,9 +68,8 @@ jobs:
       run:
         python -c "
 import yagmail
-yag = yagmail.SMTP('${{ secrets.EMAIL_USER }}' , '${{ secrets.EMAIL_PASS }}')
+yag = yagmail.SMTP('${{ secrets.EMAIL_USER }}', '${{ secrets.EMAIL_PASS }}')
 body = 'The CI pipeline has completed successfully.'
 yag.send('${{ env.TO_EMAIL }}', 'CI Pipeline Notification', body)
 "
-
     

@@ -30,4 +30,4 @@ jobs:
           python-version: 3.9
       - name: run script
         run: |
-          python -m ci-test.py
+          python -m test_ci-test.py

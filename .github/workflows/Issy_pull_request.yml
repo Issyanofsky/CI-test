@@ -4,7 +4,9 @@ on:
   pull_request:
     branches:
       - issy  # Specify the branch to trigger the workflow
-
+  push:
+    branches:
+      - issy
 jobs:
   lint:
     runs-on: ubuntu-latest

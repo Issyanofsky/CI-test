@@ -1,0 +1,83 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main  # Specify the branch to trigger the workflow
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # Specify the Python version you need
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
+
+    - name: Run linting
+      run: flake8 .  # Run flake8 to lint the code
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint  # Ensure linting passes before running tests
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest
+
+    - name: Run tests
+      run: pytest  # Run tests using pytest
+
+  send-email:
+    runs-on: ubuntu-latest
+    needs: test  # Ensure tests pass before sending an email
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install yagmail
+      run: pip install yagmail
+
+    - name: Send email notification
+      env:
+        EMAIL_USER: ${{ secrets.EMAIL_USER }}
+        EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+        TO_EMAIL: 'recipient@example.com'  # Replace with the recipient's email
+      run: |
+        python -c " \
+import os; \
+email_user = os.getenv('EMAIL_USER'); \
+email_pass = os.getenv('EMAIL_PASS'); \
+to_email = os.getenv('TO_EMAIL'); \
+try: \
+    import yagmail; \
+    yag = yagmail.SMTP(email_user, email_pass); \
+    body = 'The CI pipeline has completed successfully.'; \
+    yag.send(to_email, 'CI Pipeline Notification', body); \
+    print('Email sent successfully'); \
+except Exception as e: \
+    print(f'Failed to send email: {e}'); \
+"
